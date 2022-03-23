@@ -5,8 +5,8 @@
 :root {
 	--text-color : #fafafa; /* Texte presque blanc */
 	--background: #34495e; /* Fond bleu foncé */
-	--main-green: rgb(26, 188, 156);
-	--active-green: rgb(20, 156, 128);
+	--main-green: #0087db;
+	--active-green: #004a79;
 }
 
 * {
@@ -101,9 +101,7 @@ p#explication {
 
 #bloc-recherche>button.btn_clicable:active {
 	background-color: var(--active-green);
-}
-
-/* GIF de chargement (caché par défaut) */
+}white */
 #bloc-gif-attente {
 	display: none;
 	margin: 40px;
@@ -164,4 +162,12 @@ p#explication {
 	#section-favoris {
 		flex: 0;
 	}
+}
+
+.res {
+	background-color: #1d2935;
+}
+
+.oldPrice {
+	text-decoration: line-through;
 }
