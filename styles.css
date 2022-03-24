@@ -164,9 +164,44 @@ p#explication {
 	}
 }
 
+#top-of-res{
+	display: flex;
+	align-items: center;
+}
+
+.aide-recherche{
+	display: flex;
+	flex-direction: row;
+	margin-top: 0.5%;
+	align-items: center;
+	margin-left: 5%;
+}
+
+.aide-recherche>p{
+	width: 15%;
+}
+
+.aide-recherche>button{
+	color: white;
+	background-color: #1d2935;
+	padding: 0.5%;
+	border-radius: 10px;
+	border-color: white;
+	border-width: 2px;
+	margin-left: 1%;
+}
+
+button:hover{
+	cursor: pointer;
+}
+
 .res {
 	background-color: #1d2935;
 	margin-bottom: 5%;
+}
+
+.res:hover {
+	cursor: pointer;
 }
 
 .oldPrice {
