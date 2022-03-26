@@ -43,109 +43,9 @@ p#explication {
 /* Conteneur principal */
 #conteneur {
 	display: flex;
+	flex-direction: column;
 	flex: 1;
 	margin: 30px auto;
-}
-
-/* Section Recherche (avec résultats) */
-#section-recherche {
-	margin-top: 0;
-	flex: 1 1 auto;
-}
-
-#bloc-recherche {
-	display: flex;
-	margin: 0 auto ;
-	min-width: 450px;
-	flex-direction: row;
-}
-
-#bloc-recherche>input[type=text],
-#bloc-recherche>button {
-	display: block;
-	font-size: 1.2em ;
-}
-
-#bloc-recherche>input[type=text] {
-	color: #2d2d2d; /* Presque noir */
-	flex: 1;
-	padding: 0.7em;
-	border: 0.3em solid var(--main-green);
-}
-
-#bloc-recherche>button {
-	padding: 0.8em 0.8em;
-	/* Bordure invisible pour que le hover ne bouge pas le bouton */
-	border: 1px solid var(--main-green);
-
-	/* Par défaut, les boutons sont en gris
-	 (S'ils sont "clicables", ils passent en vert) */
-	background-color: #bebebe;
-}
-
-/* Apparences des boutons clicables */
-#bloc-recherche>button.btn_clicable {
-	background-color: var(--main-green);
-}
-
-#bloc-recherche>button:focus {
-	/* Pour éviter un affichage disgracieux
-		quand le bouton reste en focus */
-	outline: 0 !important;
-}
-
-#bloc-recherche>button.btn_clicable:hover {
-	cursor: pointer;
-	border: 1px solid white;
-}
-
-#bloc-recherche>button.btn_clicable:active {
-	background-color: var(--active-green);
-}white */
-#bloc-gif-attente {
-	display: none;
-	margin: 40px;
-	text-align: center;
-}
-
-#bloc-resultats p.res::before{
-	/* Affichage d'une flèche devant chaque résultat
-		(Cf. https://unicode-table.com/fr/21E8/ ) */
-	content: "\21E8\00A0";
-}
-
-/* Section de la barre de séparation */
-#section-separation {
-	border-left: 2px dashed var(--main-green);
-	margin: 0 20px;
-}
-
-/* Section des recherches favorites */
-#section-favoris {
-	flex: 0 0 300px;
-	margin-top: 0;
-	margin-bottom: 20px;
-}
-
-#section-favoris h2 {
-	margin-top: 0;
-}
-
-#section-favoris p {
-	margin-bottom: 8px;
-}
-
-#liste-favoris li {
-	margin-bottom: 8px;
-	cursor: pointer;
-}
-
-#liste-favoris li span {
-	text-decoration: underline;
-}
-
-#liste-favoris li span:hover {
-	color: var(--main-green);
 }
 
 /* Media-query pour gérer l'affichage sur petit écran */
@@ -153,66 +53,14 @@ p#explication {
 	#conteneur {
 		flex-direction: column-reverse;
 	}
-
-	#section-separation {
-		border-top: 2px dashed rgb(26, 188, 156);
-		margin: 0 -10px 40px -10px;
-	}
-
-	#section-favoris {
-		flex: 0;
-	}
 }
 
-#top-of-res{
-	display: flex;
-	align-items: center;
-}
-
-.aide-recherche{
-	display: flex;
-	flex-direction: row;
-	margin-top: 0.5%;
-	align-items: center;
-	margin-left: 5%;
-}
-
-.aide-recherche>p{
-	width: 15%;
-}
-
-.aide-recherche>button{
-	color: white;
-	background-color: #1d2935;
-	padding: 0.5%;
-	border-radius: 10px;
-	border-color: white;
-	border-width: 2px;
-	margin-left: 1%;
-}
-
-button:hover{
-	cursor: pointer;
-}
-
-.res {
-	background-color: #1d2935;
-	margin-bottom: 5%;
-}
-
-.res:hover {
-	cursor: pointer;
-}
-
-.oldPrice {
-	text-decoration: line-through;
-}
 ul{
   list-style-type: none;
   width: 100%;
 }
 .magasin{
-  margin-top: 5%;
+  margin-top: 3%;
 }
 .magasin img{
   margin-right: 2%;
@@ -220,4 +68,61 @@ ul{
 
 .magasin a{
   margin-left: 2%;
+}
+
+#jeu {
+	background-color: #0f1e2b;
+	display: flex;
+	max-width: 59%;
+	justify-content:flex-start;
+	align-items: center;
+	border-radius: 30px;
+}
+
+#jeu img{
+	margin: 2% 2% 2% 2%;
+	border-radius: 10px;
+	object-fit: contain;
+}
+
+#jeu p{
+	font-size:  150%;
+}
+
+#infos_jeu ul li{
+	background-color:#1d2935;
+	padding: 1% 2% 1% 2%;
+	width: 50%;
+	border-radius: 10px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+#infos_jeu ul li div{
+	width: 100%;
+	padding: 3% 0 3% 0;
+}
+
+#infos_jeu ul li a{
+	text-decoration: none;
+	background-color: #131a22;
+	width: 20%;
+	padding: 3% 0 3% 0;
+	text-align: center;
+	border-width: 3px;
+	border-style: solid;
+	border-color:#314458;
+	border-radius: 15px;
+	box-shadow: 0;
+  transition: box-shadow 1s;
+	
+}
+
+#infos_jeu ul li a:hover{
+	box-shadow: 0 0 1em #283e53;
+}
+
+header a{
+	text-decoration: none;
 }

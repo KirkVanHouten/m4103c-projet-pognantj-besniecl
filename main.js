@@ -1,40 +1,42 @@
-/* document.getElementById("btn-lancer-recherche").onclick = ()=>{
-    fetch('https://www.cheapshark.com/api/1.0/deals?title=%27Powerwash%27')
-    .then(function(response){
-        return response.json();
-    })
-    .then(function(resJson){
-        console.log(resJson);
-    })
-} */
+document.getElementById("btn-lancer-recherche").onclick = ()=>{
+    let valeurInput = document.querySelector('#bloc-recherche input').value;
+    if(valeurInput!=""){
+        recherche(valeurInput,"");
+    }else{
+        recherche("","onSale=1&sortBy=recent");
+    }
+}
 
 
 
 var doc = document.getElementById('bloc-resultats');
 
 window.onload = function(){
-    fetch('https://www.cheapshark.com/api/1.0/deals?onSale=1&sortBy=recent&pageSize=10')
-    .then(manageErrors)
-    .then(function(json){
-        afficheJeux(json);
-    })
-    .catch(function(error){
-        noResult();
-    })
+    recherche("","onSale=1&sortBy=recent");
 }
 
-function recherche(title="", filter=""){
+async function recherche(title="", filter=""){
+    document.getElementById('loading').hidden=false;
     doc.innerHTML = '';
-    if(title==""){
-        console.log('oui');
-        fetch('https://www.cheapshark.com/api/1.0/deals?'+filter)
-        .then(manageErrors)
-        .then(function(json){
-            afficheJeux(json);
+    let res;
+    try{
+        if(title == ""){
+            res = await fetch('https://www.cheapshark.com/api/1.0/deals?'+filter);
+        } else {
+            res = await fetch('https://www.cheapshark.com/api/1.0/deals?'+filter+"title="+title);
+        }
+        document.getElementById('loading').hidden=true;
+        let resJSON = manageErrors(res);
+        resJSON.then(function(res){
+            if(res.length==0){
+                noResult();
+            } else {
+                afficheJeux(res);
+            }
         })
-        .catch(function(error){
-            noResult();
-        })
+    }
+    catch(error){
+        noResult();
     }
 }
 
@@ -45,7 +47,7 @@ function manageErrors(response){
     return response.json();
 }
 
-function afficheJeux(json){
+async function afficheJeux(json){
     let listeJeuxAffiches = [];
     for(elem of json){
         if(!listeJeuxAffiches.includes(elem['title'])){
@@ -65,13 +67,9 @@ function afficheJeux(json){
             else{
                 notes.innerHTML = "Aucune notes renseignées"
             }
-            let link = document.createElement('a');
-            link.href = "https://www.cheapshark.com/redirect?dealID="+elem['dealID'];
-            link.innerText = "Acheter sur";
             bloc.appendChild(imgJeu);
             bloc.appendChild(titre);
             bloc.appendChild(notes);
-            bloc.appendChild(link);
             bloc.addEventListener('click', () => {
                 clic(idValue);
             })
