@@ -1,19 +1,23 @@
 var input = document.querySelector('#bloc-recherche > input');
-var recherchesFavorites = {};
+var recherchesFavorites;
+if(localStorage.getItem('fav')){
+    recherchesFavorites = JSON.parse(localStorage.getItem('fav'));
+} else {
+    recherchesFavorites = {};
+}
 
 input.addEventListener('keyup', checkFavoris);
 
 
 function checkFavoris(){
     let imgFav = document.getElementById('btn-favoris').querySelector('img');
-    let listeFavoris = JSON.parse(localStorage.getItem('fav'));
     if(input.value!=""){
         document.getElementById('btn-favoris').disabled = false;
     }
     else{
         document.getElementById('btn-favoris').disabled = true;
     }
-    if(listeFavoris[input.value]){
+    if(recherchesFavorites[input.value]){
         imgFav.src = "images/etoile-pleine.svg";
     }
     else{
@@ -25,7 +29,6 @@ function checkFavoris(){
 
 function addFavoris(){
     let inputValue = input.value;
-    recherchesFavorites = JSON.parse(localStorage.getItem('fav'))
     let imgFav = document.getElementById('btn-favoris').querySelector('img');
     if(imgFav.src != window.location['origin']+"/images/etoile-pleine.svg"){
         imgFav.src = "images/etoile-pleine.svg";
@@ -33,28 +36,33 @@ function addFavoris(){
         localStorage.setItem('fav', JSON.stringify(recherchesFavorites));
         console.log(JSON.parse(localStorage.getItem('fav')));
     } else{
-        imgFav.src = "images/etoile-vide.svg";
-        delete recherchesFavorites[inputValue];
-        localStorage.setItem('fav', JSON.stringify(recherchesFavorites));
-        console.log(JSON.parse(localStorage.getItem('fav')));
+        removeFavoris(inputValue);
     }
     majRecherchesFav();
 }
 
+function removeFavoris(search){
+    let imgFav = document.getElementById('btn-favoris').querySelector('img');
+    imgFav.src = "images/etoile-vide.svg";
+    delete recherchesFavorites[search];
+    localStorage.setItem('fav', JSON.stringify(recherchesFavorites));
+    console.log(JSON.parse(localStorage.getItem('fav')));
+    majRecherchesFav();
+    checkFavoris();
+}
+
 function majRecherchesFav(){
 
-    let recherches = JSON.parse(localStorage.getItem('fav'));
-    console.log(recherches);
     let listeFavoris = document.getElementById('liste-favoris');
     let sectionFav = document.getElementById('section-favoris');
     listeFavoris.innerHTML='';
-    if(Object.keys(recherches).length>0){
+    if(Object.keys(recherchesFavorites).length>0){
         
         let noFav = sectionFav.getElementsByClassName('info-vide');
         if(noFav.length!=0){
             sectionFav.removeChild(noFav[0]);
         }
-        for(rech in recherches){
+        for(rech in recherchesFavorites){
             let li = document.createElement('li');
             let title = document.createElement('span');
             let btnCroix = document.createElement('img');
@@ -64,7 +72,14 @@ function majRecherchesFav(){
                 input.value = title.innerText;
                 checkFavoris();
             } );
+            btnCroix.addEventListener('click', function(){
+                removeFavoris(title.innerText);
+            })
+            btnCroix.src = "images/croix.svg";
+            btnCroix.width=15;
+            btnCroix.title="Cliquer pour supprimer le favori";
             li.appendChild(title);
+            li.appendChild(btnCroix);
             listeFavoris.appendChild(li);
     
         }
