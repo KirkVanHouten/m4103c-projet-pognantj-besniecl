@@ -199,13 +199,18 @@ async function afficheJeux(json){
             imgJeu.src = elem['thumb'];
             let titre = document.createElement('p');
             titre.innerText = elem['title'] + " - ";
-            titre.innerHTML += '<span class="oldPrice">'+elem['normalPrice']+'</span> => '+elem['salePrice']+' (-'+Math.round(elem['savings'])+'%)';
+            if(elem['normalPrice'] ==elem['salePrice'] ){
+                titre.innerHTML += elem['normalPrice'];
+            }else{
+                titre.innerHTML += '<span class="oldPrice">'+elem['normalPrice']+'</span> => '+elem['salePrice']+' (-'+Math.round(elem['savings'])+'%)';
+            }
+            
             let notes = document.createElement('p');
             if(elem['metacriticScore']!=0 && elem['steamRatingText']!=null){
                 notes.innerText = "Metacritic : " + elem['metacriticScore'] + ' -- Score Steam : ' + elem['steamRatingText'];
             }
             else{
-                notes.innerHTML = "Aucune notes renseignées"
+                notes.innerHTML = "Aucune note renseignée"
             }
             bloc.appendChild(imgJeu);
             bloc.appendChild(titre);
