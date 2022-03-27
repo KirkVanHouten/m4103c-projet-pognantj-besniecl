@@ -6,6 +6,7 @@ function affiche(id){
   localStorage.setItem('jeuSelect',id);
 }
 
+
 window.onload = function(){
   if(!localStorage.getItem('storesNames') || !localStorage.getItem('storesImg')){
     fetch("https://www.cheapshark.com/api/1.0/stores")

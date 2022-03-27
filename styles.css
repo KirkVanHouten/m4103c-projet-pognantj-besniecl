@@ -81,6 +81,7 @@ p#explication {
 	/* Par défaut, les boutons sont en gris
 	 (S'ils sont "clicables", ils passent en vert) */
 	background-color: #bebebe;
+	transition: border 1s;
 }
 
 /* Apparences des boutons clicables */
@@ -137,7 +138,6 @@ p#explication {
 
 #liste-favoris li {
 	margin-bottom: 8px;
-	cursor: pointer;
 }
 
 #liste-favoris li span {
@@ -146,6 +146,7 @@ p#explication {
 
 #liste-favoris li span:hover {
 	color: var(--main-green);
+	cursor: pointer;
 }
 
 /* Media-query pour gérer l'affichage sur petit écran */
@@ -178,7 +179,7 @@ p#explication {
 }
 
 .aide-recherche>p{
-	width: 15%;
+	width: 100;
 }
 
 .aide-recherche>button{
@@ -197,13 +198,37 @@ button:hover{
 
 .res {
 	background-color: #1d2935;
-	margin-bottom: 5%;
+	margin-bottom: 2%;
+	margin-top: 2%;
+	border: 2px solid transparent;
+	transition: border 1s;
+	border-radius: 10px;
 }
 
 .res:hover {
 	cursor: pointer;
+	border-color:#ffffff;
+
+}
+
+.res > img{
+	border-radius: 5px;
+	margin-top: 2%;
+	margin-left: 2%;
+}
+
+.res > p{
+	margin-left: 2%;
 }
 
 .oldPrice {
 	text-decoration: line-through;
+}
+
+#liste-favoris li > img{
+	margin-left: 6%;
+}
+
+#liste-favoris li > img:hover{
+	cursor: pointer;
 }

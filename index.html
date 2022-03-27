@@ -6,12 +6,14 @@
 		<link rel="shortcut icon" type="image/x-icon" href="sale.ico">
 		<link rel="stylesheet" href="styles.css">
 	</head>
-	<body>
+	<body >
 		<header>
 			<h1>Recherche d'offres sur des jeux</h1>
 
 			<p id="explication">Cette page permet de rechercher des offres sur des jeux via l'API publique de <a href="https://apidocs.cheapshark.com/" target="_blank">cheapshark.com</a>.<br>
-			Saisir le nom d'un jeu, puis filtrez avec le prix minimum/maximum, les notes sur metacritic, steam, ... pour rechercher les offres sur les jeux correspondants, et enregistrer vos recherches favorites pour les retrouver facilement.</p>
+			Saisissez le nom d'un jeu pour rechercher les offres sur les jeux correspondants, et enregistrez vos recherches favorites pour les retrouver facilement. Vous pouvez ensuite cliquer sur les jeux
+			pour voir le détails des sites sur lesquels il est vendu, ainsi que les prix sur chaque site.<br>
+			Vous pouvez effectuer des recherches pré-faites en cliquant sur les boutons correspondants.</p>
 		</header>
 		<hr>
 		<main id="conteneur">
@@ -60,19 +62,8 @@
 				<h2>Recherches favorites</h2>
 				<p>Cliquer sur une recherche favorite ci-dessus pour relancer celle-ci :</p>
 				<ul id="liste-favoris">
-					<li>
-						<span title="Cliquer pour relancer la recherche">Grenoble</span>
-						<img src="images/croix.svg" alt="Icone pour supprimer le favori" width=15 title="Cliquer pour supprimer le favori">
-					</li>
-					<li>
-						<span title="Cliquer pour relancer la recherche">Lyon</span>
-						<img src="images/croix.svg" alt="Icone pour supprimer le favori" width=15 title="Cliquer pour supprimer le favori">
-					</li>
-					<li>
-						<span title="Cliquer pour relancer la recherhe.">Web</span>
-						<img src="images/croix.svg" alt="Icone pour supprimer le favori" width=15 title="Cliquer pour supprimer le favori">
-					</li>
 				</ul>
+				<div id="noRes"></div>
 			</section>
 
 		</main>
