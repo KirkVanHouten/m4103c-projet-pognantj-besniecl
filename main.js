@@ -199,7 +199,7 @@ async function afficheJeux(json){
             imgJeu.src = elem['thumb'];
             let titre = document.createElement('p');
             titre.innerText = elem['title'] + " - ";
-            if(elem['normalPrice'] ==elem['salePrice'] ){
+            if(parseFloat(elem['normalPrice'])==parseFloat(elem['salePrice'])){
                 titre.innerHTML += elem['normalPrice'];
             }else{
                 titre.innerHTML += '<span class="oldPrice">'+elem['normalPrice']+'</span> => '+elem['salePrice']+' (-'+Math.round(elem['savings'])+'%)';

@@ -78,7 +78,7 @@ function affichageJeu(res){
     div.innerHTML += storesList[deal['storeID']];
     
     
-    if(deal['price'] >= deal['retailPrice']){
+    if(parseFloat(deal['price']) >= parseFloat(deal['retailPrice'])){
       div.innerHTML += " -- Prix : " + deal['price'] + "</div>";
     } else{
       div.innerHTML += " -- Prix : <strike>" + deal['retailPrice'] + "</strike> => " + deal['price'] + " (-" + Math.round(deal['savings']) + "%)</div>";
