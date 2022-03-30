@@ -126,3 +126,7 @@ ul{
 header a{
 	text-decoration: none;
 }
+
+#explication a{
+	text-decoration: underline;
+}

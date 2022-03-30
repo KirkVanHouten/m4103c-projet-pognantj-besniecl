@@ -10,8 +10,8 @@ function affiche(id){
 window.onload = async function(){
   if(!localStorage.getItem('storesNames') && !localStorage.getItem('storesImg')){
     let res = await fetch("https://www.cheapshark.com/api/1.0/stores");
-    res.then(manageErrors)
-    .then(function(res){
+    let resJSON = manageErrors(res);
+    resJSON.then(function(res){
       storesArrayToObject(res);
     })
   }
@@ -20,6 +20,13 @@ window.onload = async function(){
   }else{
     console.log('Pas de jeu sélectionné')
   }
+}
+
+function manageErrors(response){
+  if(!response.ok){
+      throw Error(response.statusText);
+  }
+  return response.json();
 }
 
 function storesArrayToObject(res){
