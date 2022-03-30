@@ -7,10 +7,10 @@ function affiche(id){
 }
 
 
-window.onload = function(){
-  if(!localStorage.getItem('storesNames') || !localStorage.getItem('storesImg')){
-    fetch("https://www.cheapshark.com/api/1.0/stores")
-    .then(manageErrors)
+window.onload = async function(){
+  if(!localStorage.getItem('storesNames') && !localStorage.getItem('storesImg')){
+    let res = await fetch("https://www.cheapshark.com/api/1.0/stores");
+    res.then(manageErrors)
     .then(function(res){
       storesArrayToObject(res);
     })
