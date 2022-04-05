@@ -1,12 +1,14 @@
 var information = document.getElementById('infos_jeu');
 var main        = document.getElementById('conteneur');
+//stocke en local le jeu qui a été sélectionné pour éviter tout problème
+//lorsque l'on rafraichit la page
 function affiche(id){
-  console.log(id);
   localStorage.removeItem('jeuSelect');
   localStorage.setItem('jeuSelect',id);
 }
 
-
+//utilisation du async pour éviter que la page ne s'affiche avant que les données ne
+//soient récupérées.
 window.onload = async function(){
   if(!localStorage.getItem('storesNames') && !localStorage.getItem('storesImg')){
     let res = await fetch("https://www.cheapshark.com/api/1.0/stores");
@@ -15,13 +17,10 @@ window.onload = async function(){
       storesArrayToObject(res);
     })
   }
-  if(localStorage.getItem('jeuSelect')){
-    fetchDatas(localStorage.getItem('jeuSelect'));
-  }else{
-    console.log('Pas de jeu sélectionné')
-  }
+  fetchDatas(localStorage.getItem('jeuSelect'));
 }
 
+//gère les erreurs sur le fetch
 function manageErrors(response){
   if(!response.ok){
       throw Error(response.statusText);
@@ -29,6 +28,7 @@ function manageErrors(response){
   return response.json();
 }
 
+//transforme listes de magasin en object et les stocke dans le local storage
 function storesArrayToObject(res){
   let storesObject = {};
   let storesImage  = {};
@@ -45,6 +45,7 @@ function storesArrayToObject(res){
   
 }
 
+//permet de récupérer les données du jeu sélectionné
 function fetchDatas(id){
   fetch("https://www.cheapshark.com/api/1.0/games?id="+id)
   .then(manageErrors)
@@ -53,13 +54,7 @@ function fetchDatas(id){
   })
 }
 
-function manageErrors(response){
-  if(!response.ok){
-      throw Error(response.statusText);
-  }
-  return response.json();
-}
-
+//affichage du jeu et de tous les magasins ainsi que leurs prix,...
 function affichageJeu(res){
   let storesList   = JSON.parse(localStorage.getItem('storesNames'));
   let storesImg    = JSON.parse(localStorage.getItem('storesImg'));
@@ -85,10 +80,14 @@ function affichageJeu(res){
     div.innerHTML += storesList[deal['storeID']];
     
     
-    if(parseFloat(deal['price']) >= parseFloat(deal['retailPrice'])){
-      div.innerHTML += " -- Prix : " + deal['price'] + "</div>";
-    } else{
-      div.innerHTML += " -- Prix : <strike>" + deal['retailPrice'] + "</strike> => " + deal['price'] + " (-" + Math.round(deal['savings']) + "%)</div>";
+    if(parseFloat(deal['retailPrice']) > parseFloat(deal['price'])){
+      let reduction = ((parseFloat(deal['retailPrice'])-parseFloat(deal['price']))/((parseFloat(deal['retailPrice'])+parseFloat(deal['price']))/2))*100;
+      div.innerHTML += " -- Prix : <strike>" + deal['retailPrice'] + " €</strike> => " + deal['price'] + " € (-" + Math.round(reduction) + "%)</div>";
+    }else if(parseFloat(deal['price']) == parseFloat(deal['retailPrice'])){
+      div.innerHTML += " -- Prix : " + deal['price'] + " €</div>";
+    }
+    else{
+      div.innerHTML += " -- Prix : <strike>" + deal['retailPrice'] + " €</strike> => " + deal['price'] + " € (-" + Math.round(deal['savings']) + "%)</div>";
     }
     listItem.appendChild(div);
     listItem.innerHTML += "<a href=https://www.cheapshark.com/redirect?dealID=" + deal['dealID'] + "> Acheter </a>";
@@ -103,5 +102,4 @@ function affichageJeu(res){
   main.appendChild(divJeu);
   information.appendChild(list);
   main.appendChild(information);
-  console.log(res['info'])
 }

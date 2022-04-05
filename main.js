@@ -1,12 +1,42 @@
+var doc = document.getElementById('bloc-resultats');
+//le bloc de code suivant permet de rafficher la dernière recherche effectuée lorsque l'on recharge la page ou que l'on revient de la page de détails
+//ce premier if vérifie si une sauvegarde existe et l'affiche si oui
+if(localStorage.getItem('recherchePrec') || localStorage.getItem('rechercheFiltre')){
+    window.onload = function(){
+        
+        document.getElementById('btn-favoris').addEventListener('click', addFavoris);
+        if(localStorage.getItem('rechercheTitre')){
+            recherche(localStorage.getItem('rechercheTitre'));
+        }
+        else{
+            recherche("",localStorage.getItem('rechercheFiltre'));
+        }
+        checkFavoris();
+        majRecherchesFav();
+    }
+//sinon, on fait une recherche de base
+}else{
+    window.onload = function(){
+        document.getElementById('btn-favoris').addEventListener('click', addFavoris);
+        document.getElementById('btn-favoris').disabled = true;
+        document.querySelector('#bloc-recherche input').value = "";
+        majRecherchesFav();
+        recherche("","onSale=1&sortBy=recent");
+    }
+}
 var input = document.querySelector('#bloc-recherche > input');
 var recherchesFavorites;
+//le code suivant récupère dans le local storage les recherches favorites
 if(localStorage.getItem('fav')){
     recherchesFavorites = JSON.parse(localStorage.getItem('fav'));
 } else {
     recherchesFavorites = {};
 }
 
+//A chaque lettre tappée on vérifie si le contenu de la barre de recherche correspond a un favoris existant
 input.addEventListener('keyup', checkFavoris);
+
+//lance une recherche avec la touche 'entrée'
 input.addEventListener('keypress', function(event){
     if(event.keyCode === 13){
         event.preventDefault();
@@ -14,7 +44,7 @@ input.addEventListener('keypress', function(event){
     }
 })
 
-
+//Fonction permettant de vérifier si le texte tappé est déjà enregistré dans les favoris
 function checkFavoris(){
     localStorage.setItem('recherchePrec', input.value);
     let imgFav = document.getElementById('btn-favoris').querySelector('img');
@@ -34,6 +64,7 @@ function checkFavoris(){
     }
 }
 
+//Cette fonction permet de rendre la recherche des favoris non sensible à la casse
 function findVal(fav, inputValue) {
     inputValue = (inputValue + "").toLowerCase();
     for (var p in fav) {
@@ -44,6 +75,7 @@ function findVal(fav, inputValue) {
     }
 }
 
+//fonction permettant d'afficher les favoris
 function addFavoris(){
     let inputValue = input.value;
     let imgFav = document.getElementById('btn-favoris').querySelector('img');
@@ -57,8 +89,9 @@ function addFavoris(){
     majRecherchesFav();
 }
 
+//Suppression les favoris
 function removeFavoris(search){
-    if(confirm("Etes-vous sûr de vouloir supprimer le favoris ?")){
+    if(confirm("Etes-vous sûr de vouloir supprimer le favori ?")){
         let imgFav = document.getElementById('btn-favoris').querySelector('img');
         imgFav.src = "images/etoile-vide.svg";
         delete recherchesFavorites[findVal(recherchesFavorites,search)];
@@ -69,6 +102,7 @@ function removeFavoris(search){
     
 }
 
+//Mise à jour du menu droit affichant la liste des favoris
 function majRecherchesFav(){
 
     let listeFavoris = document.getElementById('liste-favoris');
@@ -114,58 +148,35 @@ function majRecherchesFav(){
     
 }
 
+//Association de la fonction vérifiant si une recherche est valide sur le bouton loupe
 document.getElementById("btn-lancer-recherche").onclick = ()=>{
     verifValeurRecherche();
 }
 
 
-
+//Vérification de la valeur de la recherche, bloquant une recherche vide
 function verifValeurRecherche(){
     let valeurInput = document.querySelector('#bloc-recherche input').value;
     if(valeurInput!=""){
         recherche(valeurInput,"");
-    }else{
-        recherche("","onSale=1&sortBy=recent");
     }
 }   
 
-var doc = document.getElementById('bloc-resultats');
-if(localStorage.getItem('recherchePrec') || localStorage.getItem('rechercheFiltre')){
-    window.onload = function(){
-        
-        document.getElementById('btn-favoris').addEventListener('click', addFavoris);
-        if(localStorage.getItem('rechercheTitre')){
-            recherche(localStorage.getItem('rechercheTitre'));
-        }
-        else{
-            recherche("",localStorage.getItem('rechercheFiltre'));
-        }
-        checkFavoris();
-        majRecherchesFav();
-    }
-}else{
-    window.onload = function(){
-        document.getElementById('btn-favoris').addEventListener('click', addFavoris);
-        document.getElementById('btn-favoris').disabled = true;
-        document.querySelector('#bloc-recherche input').value = "";
-        majRecherchesFav();
-        recherche("","onSale=1&sortBy=recent");
-    }
-}
 
 
+//Fonction permettant de rechercher un jeu avec son nom/ses filtres
+//Utilisation du async/await pour avoir l'icone le chargement jusqu'à la fin du fetch
 async function recherche(title="", filter=""){
     document.getElementById('loading').hidden=false;
     doc.innerHTML = '';
     let res;
     try{
         if(title == ""){
-            console.log(filter);
             res = await fetch('https://www.cheapshark.com/api/1.0/deals?'+filter);
             localStorage.setItem('rechercheFiltre',filter );
             localStorage.removeItem('rechercheTitre');
         } else {
-            res = await fetch('https://www.cheapshark.com/api/1.0/deals?'+filter+"title="+title);
+            res = await fetch('https://www.cheapshark.com/api/1.0/deals?sortBy=price&'+"title="+title);
             localStorage.setItem('rechercheTitre',title );
         }
         document.getElementById('loading').hidden=true;
@@ -183,6 +194,7 @@ async function recherche(title="", filter=""){
     }
 }
 
+//gestion des erreurs sur les fetch
 function manageErrors(response){
     if(!response.ok){
         throw Error(response.statusText);
@@ -190,6 +202,7 @@ function manageErrors(response){
     return response.json();
 }
 
+//Affichage des blocs contenant le nom du jeu, son image, ...
 async function afficheJeux(json){
     let listeJeuxAffiches = [];
     for(elem of json){
@@ -197,16 +210,23 @@ async function afficheJeux(json){
             listeJeuxAffiches.push(elem['title']);
             let bloc = document.createElement('div');
             let idValue = elem['gameID'];
+            let sale = elem['salePrice'];
+            
+            let normalPrice = elem['normalPrice'];
             bloc.className = "res";
             let imgJeu = document.createElement('img');
             imgJeu.src = elem['thumb'];
             let titre = document.createElement('p');
+            titre.className = "titreJeu";
             titre.innerText = elem['title'] + " - ";
-            titre.innerHTML += "<img src='images/SteamIcon.webp'/>";
-            if(parseFloat(elem['normalPrice'])==parseFloat(elem['salePrice'])){
-                titre.innerHTML += elem['normalPrice'];
+            //ce if est nécessaire pour corriger un problème de l'API inversant le prix en promotion et le prix normal
+            if(parseFloat(sale) > parseFloat(normalPrice)){
+                let reduction = ((parseFloat(sale)-parseFloat(normalPrice))/((parseFloat(sale)+parseFloat(normalPrice))/2))*100;
+                titre.innerHTML += " -- Prix : <strike>" + sale + " €</strike> => " + normalPrice + "  € (-" + Math.round(reduction) + "%)</div>";
+            }else if(parseFloat(normalPrice) == parseFloat(sale)){
+                titre.innerHTML += " -- Prix : " + normalPrice+ " €</div>";
             }else{
-                titre.innerHTML += '<span class="oldPrice">'+elem['normalPrice']+'</span> => '+elem['salePrice']+' (-'+Math.round(elem['savings'])+'%)';
+                titre.innerHTML += '<span class="oldPrice">'+normalPrice+'  €</span> => '+sale+' € (-'+Math.round(elem['savings'])+'%)';
             }
             
             let notes = document.createElement('p');
@@ -216,9 +236,13 @@ async function afficheJeux(json){
             else{
                 notes.innerHTML = "Aucune note renseignée"
             }
+            let clicTxt = document.createElement("p");
+            clicTxt.innerText = "Cliquez pour d'autres d'offres";
+            clicTxt.className = "clicOffres"
             bloc.appendChild(imgJeu);
             bloc.appendChild(titre);
             bloc.appendChild(notes);
+            bloc.appendChild(clicTxt);
             bloc.addEventListener('click', () => {
                 clic(idValue);
             })
@@ -231,6 +255,7 @@ async function afficheJeux(json){
     }
 }
 
+//permet de stocker la recherche précédente dans le local storage en cas de clic sur un jeu
 function clic(bloc){
     if(localStorage.getItem('rechercheTitre')){
         if(localStorage.getItem('rechercheFiltre')){
@@ -241,6 +266,7 @@ function clic(bloc){
     affiche(bloc);
 }
 
+//Affichage d'un texte en cas d'absence de résultat
 function noResult(){
     let noResultP = document.createElement('p');
     noResultP.innerHTML = '<p class="info-vide">( &empty; Aucun résultat trouvé )</p>'

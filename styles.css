@@ -232,3 +232,13 @@ button:hover{
 #liste-favoris li > img:hover{
 	cursor: pointer;
 }
+
+.clicOffres{
+	font-style: oblique;
+	text-decoration: underline;
+	color: #04639e;
+}
+
+img{
+	max-width: 200px;
+}
