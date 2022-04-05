@@ -58,12 +58,15 @@ function addFavoris(){
 }
 
 function removeFavoris(search){
-    let imgFav = document.getElementById('btn-favoris').querySelector('img');
-    imgFav.src = "images/etoile-vide.svg";
-    delete recherchesFavorites[findVal(recherchesFavorites,search)];
-    localStorage.setItem('fav', JSON.stringify(recherchesFavorites));
-    majRecherchesFav();
-    checkFavoris();
+    if(confirm("Etes-vous sûr de vouloir supprimer le favoris ?")){
+        let imgFav = document.getElementById('btn-favoris').querySelector('img');
+        imgFav.src = "images/etoile-vide.svg";
+        delete recherchesFavorites[findVal(recherchesFavorites,search)];
+        localStorage.setItem('fav', JSON.stringify(recherchesFavorites));
+        majRecherchesFav();
+        checkFavoris();
+    }
+    
 }
 
 function majRecherchesFav(){
